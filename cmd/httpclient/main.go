@@ -1,11 +1,12 @@
 package main
 
 import (
+	"context"
 	"flag"
-	"io/ioutil"
 	"log"
-	"net/http"
 	"time"
+
+	"github.com/paulwizviz/go-context/internal/testclient"
 )
 
 func main() {
@@ -16,26 +17,11 @@ func main() {
 	log.Println("Timeout: ", *timeoutPtr)
 	log.Println("URL: ", *urlPtr)
 
-	client := &http.Client{
-		Timeout: time.Duration(*timeoutPtr) * time.Second,
-	}
-
-	request, err := http.NewRequest("GET", *urlPtr, nil)
+	resp, err := testclient.Get(context.TODO(), time.Duration(*timeoutPtr)*time.Second, *urlPtr)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	resp, err := client.Do(request)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	log.Println(string(body))
+	log.Println("Response: ", string(resp))
 
 }
