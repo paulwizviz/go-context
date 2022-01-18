@@ -62,3 +62,19 @@ go run cmd/ctxtimeout/main.go -timeout=1 -cancelin=10 url="http://localhost:8090
 2022/01/17 19:06:59 Get "http://localhost:8090/hello": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
 exit status 1
 ```
+
+## Client server context with value
+
+This example demonstrate the fact that you can't send a context value from a client to server using the standard package request.
+
+On the client side:
+```
+go run cmd/ctxvalue/main.go client
+2022/01/18 22:14:36 Request: What's up!
+2022/01/18 22:14:36 Hello World
+```
+
+On the servier side:
+```
+2022/01/18 22:14:36 Conext value from client: <nil>
+```
